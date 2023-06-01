@@ -1,3 +1,25 @@
+:root {
+  --main-bg: #172855;
+  --second-bg: #030c35;
+  --third-bg: #0a1340;
+  --four-bg: #021959;
+  --five-bg: #324da6;
+  --six-bg: #04164f;
+  --seven-bg: #fff;
+  --txt-color: #ffffff;
+  --txt2-color: #000000;
+  --grey-bg : #808080;
+  --bg-success: #4bdd54;
+  --bg-primary: #2e5bff;
+  --bg-warning: #f7c137;
+  --danger-bg : #E84A50;
+  --bg-info: #8c54ff;
+  --bg-teal: #00c1d4;
+  --box-shadow: 0.25rem 0.25rem 1.25rem rgba(0, 0, 0, 0.1);
+  --border-raduis: 8px;
+  /*1px 0px 6px #a0a0a0  */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -14,28 +36,27 @@ code {
 
 body {
   position: relative;
-  background: #172855;
+  background: var(--main-bg);
   max-width: 100vw;
   height: 100vh;
-  color: #fff;
-   
+  color: var(--txt-color);
 }
 
-a, .link{
+a,
+.link {
   text-decoration: none;
   text-transform: none;
 }
 
-a:hover{
+a:hover {
   text-decoration: none;
   text-transform: none;
-
 }
 
-ul{
+ul {
   margin: 0;
 }
 
-li{
+li {
   list-style-type: none;
 }

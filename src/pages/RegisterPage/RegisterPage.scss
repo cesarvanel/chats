@@ -1,0 +1,58 @@
+.RegisterPage {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--txt2-color);
+
+  .wrapper {
+    width: 400px;
+    height: 450px;
+    background-color: var(--seven-bg);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+   
+    padding: 20px 30px;
+    h1 {
+      margin: 0;
+      text-align: center;
+    }
+    .index {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    form {
+      margin-top: 30px;
+    }
+
+    .btn-contains {
+      margin-top: 20px;
+
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      button {
+        padding: 10px 15px;
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: capitalize;
+        border: 0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .btn-cancel{
+
+        background-color: #a0a0a0;
+        color: var(--txt-color);
+      }
+      .btn-submit{
+        background-color: var(--second-bg);
+        color: var(--txt-color);
+      }
+
+    }
+  }
+}
