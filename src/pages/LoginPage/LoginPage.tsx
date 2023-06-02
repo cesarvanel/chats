@@ -2,14 +2,22 @@ import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import "./LoginPage.scss";
 import { Login } from "../../types/interface";
+import { EnvelopeSimple, EyeSlash, LockKey } from "@phosphor-icons/react";
+import { useState } from "react";
 
 const LoginPage = () => {
+  const [invisible, setInvisible] = useState(true);
   const {
     register,
     handleSubmit,
+    watch,
     trigger,
-    formState: { errors },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<Login>();
+
+  const toggle = () => {
+    setInvisible((prev: boolean) => (prev = !invisible));
+  };
 
   const onSubmit: SubmitHandler<Login> = (data: Login) => {
     console.log(data);
@@ -18,18 +26,12 @@ const LoginPage = () => {
   return (
     <div className="LoginPage">
       <div className="wrapper">
-        <h1>login</h1>
+        <h1>Welcome Back!!</h1>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <p className="text">
-            Vous n'avez pas de compte ?{" "}
-            <span>
-              <Link to={"/register"}>créez votre compte?</Link>
-            </span>{" "}
-            , cela prend moins d'une minute
-          </p>
+          <p className="text">Enter your login details below</p>
           <div className="formController">
-            <label htmlFor="">Email</label>
+            <label htmlFor="">Email*</label>
             <input
               type="email"
               placeholder="Your Email"
@@ -45,13 +47,20 @@ const LoginPage = () => {
                 trigger("email");
               }}
             />
-            {errors.email && <span>{errors.email.message}</span>}
+
+            <span className={`icone ${errors.email && "error"}`}>
+              {" "}
+              <EnvelopeSimple weight="bold" />
+            </span>
+
+            {errors.email && <small>{errors.email.message}</small>}
           </div>
 
           <div className="formController">
-            <label htmlFor="">password</label>
+            <label htmlFor="">password*</label>
+
             <input
-              type="password"
+              type={invisible ? "password" : "text"}
               placeholder="Your password"
               {...register("password", {
                 required: "password is required",
@@ -66,17 +75,42 @@ const LoginPage = () => {
               }}
               className={`${errors.password && "invalid"}`}
             />
-            {errors.password && <span>{errors.password.message}</span>}
+
+            <span className={`icone ${errors.password && "error"}`}>
+              <LockKey weight="bold" />
+            </span>
+
+            <span className="cash-eye" role="button" onClick={() => toggle()}>
+              <EyeSlash weight="fill" />
+            </span>
+            {errors.password && <small>{errors.password.message}</small>}
           </div>
 
           <div className="forgot">
             <Link to={"/forgotpassword"}>
-              <span>forgot password</span>
+              <span>forgot password?</span>
             </Link>
           </div>
+          <div className="btn-container">
+            <button
+              disabled={!isValid}
+              className={`${isValid && "submit"}`}
+              type="submit"
+            >
+              {isSubmitting ? "loading..." : "sign in"}
+            </button>
+          </div>
 
-          <button type="submit">submit</button>
+          <p>
+            Don't have account yet?{" "}
+            <strong>
+              <Link to="/register">Sign Up</Link>
+            </strong>
+          </p>
+
+          <pre>{JSON.stringify(watch())}</pre>
         </form>
+
       </div>
     </div>
   );

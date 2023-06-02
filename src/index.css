@@ -42,8 +42,7 @@ body {
   color: var(--txt-color);
 }
 
-a,
-.link {
+a {
   text-decoration: none;
   text-transform: none;
 }

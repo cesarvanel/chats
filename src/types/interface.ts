@@ -5,6 +5,7 @@ export interface Register {
   avatar: string;
   password: string;
   job: string;
+  confPassword:string
 
 }
 

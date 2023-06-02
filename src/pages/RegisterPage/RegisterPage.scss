@@ -8,12 +8,12 @@
 
   .wrapper {
     width: 400px;
-    height: 450px;
+    min-height: 400px;
+    height: max-content;
     background-color: var(--seven-bg);
     border-radius: 10px;
     box-shadow: var(--box-shadow);
-   
-    padding: 20px 30px;
+    padding: 20px 0px;
     h1 {
       margin: 0;
       text-align: center;
@@ -21,10 +21,11 @@
     .index {
       display: flex;
       justify-content: flex-end;
+      margin-right: 10px;
     }
 
     form {
-      margin-top: 30px;
+      padding: 0 30px;
     }
 
     .btn-contains {

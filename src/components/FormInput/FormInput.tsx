@@ -1,7 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
+import {
+  type FieldValues,
+  type UseFormReturn,
+  type SubmitHandler,
+  useForm,
+} from "react-hook-form";
 
 import "./FormInput.scss";
 
+type InputProps = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+>;
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  (props, ref) => (
+    <div className="FormInput">
+      <label htmlFor="">{props.name}</label>
+      <input ref={ref} {...props} />
+    </div>
+  )
+);
+
+type Formprops<TFormValues extends FieldValues> = {
+  onSubmit: SubmitHandler<TFormValues>;
+
+  children: (methods: UseFormReturn<TFormValues>) => React.ReactNode;
+};
+
+export const Form = <TFormValues extends FieldValues>({
+  onSubmit,
+  children,
+}: Formprops<TFormValues>) => {
+  const methods = useForm<TFormValues>();
+  return (
+    <form onSubmit={methods.handleSubmit(onSubmit)}>{children(methods)}</form>
+  );
+};
+
+/*     
 type InputProps = {
   label?: string;
   value: any;
@@ -25,11 +62,8 @@ const FormInput = ({
   errorMessage,
   onChange,
 }: InputProps) => {
-  const [focused, setFocused] = useState(false);
 
-  const handleFocus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFocused(true);
-  };
+
 
   return (
     <div className="FormInput">
@@ -41,7 +75,6 @@ const FormInput = ({
         pattern={pattern}
         required={required}
         onChange={onChange}
-        onBlur={handleFocus}
       />
       <span>{errorMessage}</span>
     </div>
@@ -49,3 +82,4 @@ const FormInput = ({
 };
 
 export default FormInput;
+ */

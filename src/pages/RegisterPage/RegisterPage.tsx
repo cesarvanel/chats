@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import "./RegisterPage.scss";
 import useMultiStepForm from "../../hooks/useMultisetpform";
 import Step1 from "../../components/Step1/Step1";
@@ -7,38 +5,18 @@ import Step2 from "../../components/Step2/Step2";
 import Step3 from "../../components/Step3/Step3";
 import { Register } from "../../types/interface";
 
+import { SubmitHandler, useForm, FormProvider } from "react-hook-form";
+
 const RegisterPage = () => {
-
-
-
-  const [formData, setFormData] = useState<Register>({
-    username: "",
-    email: "",
-    number: "",
-    avatar: "",
-    password: "",
-    job: "",
-  });
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => [
-    setFormData({ ...formData, [e.target.name]: e.target.value }),
-  ];
+  const methods = useForm<Register>();
 
   const { step, steps, currentStepIndex, next, back, isLastStep, isFirtStep } =
-    useMultiStepForm([
-      <Step1 formData={formData} onChange={onChange} setFormData={setFormData} />,
-      <Step2 formData={formData} onChange={onChange} setFormData={setFormData} />,
-      <Step3 formData={formData} onChange={onChange} setFormData={setFormData} />,
-    ]);
+    useMultiStepForm([<Step1 />, <Step2 />, <Step3 />]);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    console.log(formData);
-
+  const onSubmit: SubmitHandler<Register> = (data) => {
     if (!isLastStep) return next();
 
-    console.log('it is a last step')
+    console.log(data);
   };
 
   return (
@@ -48,23 +26,31 @@ const RegisterPage = () => {
           {currentStepIndex + 1} / {steps.length}
         </div>
 
-        <form onSubmit={handleSubmit} autoComplete="none">
-          {step}
+        <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)}>
+            <>
+              {step}
 
-          <div className="btn-contains">
-            {!isFirtStep && (
-              <button type="button" className="btn-cancel" onClick={() => back()}>
-                cancel
-              </button>
-            )}
-            <button type="submit" className="btn-submit">{!isLastStep ? "next" : "submit"}</button>
-          </div>
-        </form>
+              <div className="btn-contains">
+                {!isFirtStep && (
+                  <button
+                    type="button"
+                    className="btn-cancel"
+                    onClick={() => back()}
+                  >
+                    cancel
+                  </button>
+                )}
+                <button type="submit" className="btn-submit">
+                  {!isLastStep ? "next" : "submit"}
+                </button>
+              </div>
+            </>
+          </form>
+        </FormProvider>
       </div>
     </div>
   );
 };
 
 export default RegisterPage;
-
-/* ;  */

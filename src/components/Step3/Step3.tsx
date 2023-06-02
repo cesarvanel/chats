@@ -1,20 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./Step3.scss";
-import { StepProps } from "../Step1/Step1";
 import { Buffer } from "buffer";
 import axios from "axios";
 import Loader from "../loader/loader";
 import { DisplayToast } from "../../utils/toastDispaly/DisplayToast";
 import { File_Api} from "../../utils/constant/constant";
+import { useFormContext } from "react-hook-form";
+import { Register } from "../../types/interface";
 
 
-const Step3 = ({ formData, onChange, setFormData }: StepProps) => {
+const Step3 = () => {
 
+
+  const {
+    register,
+    setValue,
+    formState: { errors },
+  } = useFormContext<Register>();
   const [isLoading, setIsLoading] = useState(true);
   const [avatars, setAvatars] = useState<any[]>([]);
   const [selectedAvatarIndex, setetSelectedAvatarIndex] =
     useState<any>(undefined);
+
 
   useEffect(() => {
     async function fetchAvatars() {
@@ -48,15 +56,16 @@ const Step3 = ({ formData, onChange, setFormData }: StepProps) => {
 
   const selectAvatar = (index: number, avatar: any) => {
     setetSelectedAvatarIndex((prev: number) => (prev = index));
-    setFormData({
-      ...formData,
-      avatar: avatar,
-    });
+    setValue("avatar",avatar, {
+      shouldValidate: true
+    })
   };
 
   return (
     <div className="Step3">
       <h1>Select Avatar Image</h1>
+
+      {errors.avatar && <small>{errors.avatar.message}</small>}
 
       {isLoading ? (
         <div
@@ -82,6 +91,9 @@ const Step3 = ({ formData, onChange, setFormData }: StepProps) => {
                   src={`data:image/svg+xml;base64,${avatar}`}
                   alt=""
                   onClick={() => selectAvatar(index, avatar)}
+                  {...register("avatar",{
+                    required:"select avatar image"
+                  })}
                 />
               </div>
             );
