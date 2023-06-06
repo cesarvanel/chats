@@ -1,12 +1,13 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSessionContext } from "../context/session.context";
 
 export const ProtectedRoute = () => {
-  const token = useSessionContext();
+  const location = useLocation();
+  const { token } = useSessionContext();
 
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
-
-  return <Outlet />;
+  return token ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" state={{ from: location }} replace />
+  );
 };

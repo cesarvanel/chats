@@ -1,15 +1,17 @@
 .Step1 {
   min-height: 340px;
   .container {
+    position: relative;
     .formController {
       &.invalid {
         border: 2px solid var(--danger-bg);
-        &::placeholder{
+        &::placeholder {
           color: var(--danger-bg);
         }
       }
     }
-    small{
+
+    small {
       font-size: 14px;
       color: var(--danger-bg);
     }

@@ -1,44 +1,41 @@
-import axios from "axios";
-import {
-  useContext,
-  createContext,
-  useEffect,
-  useState,
-  useMemo,
-  FC,
-} from "react";
+import { useContext, createContext, useMemo, FC } from "react";
+import { User } from "../types/interface";
+import { useAppSelector, useAppDispatch } from "../states/stores/stores";
+import { userSlice } from "../states/app/user/reducer";
+import { LocalStorageManager } from "../utils/localStorage/localStorage";
+
 
 export type sessionContextProps = {
-  token: string;
-  updateToken: (newToken: string) => void;
+  token: string | null;
+  refresh: string | null;
+  sesUser: User | null;
+  updateSesUser: (sesUser: User) => void;
 };
 
 export const SessionContext = createContext<sessionContextProps>({} as any);
 
 export const SessionContextProvider: FC<any> = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const dispatch = useAppDispatch();
 
-  const updateToken = (newToken: string) => {
-    setToken(newToken);
-  };
+  const {sesUser} = useAppSelector((state) => state);
+  const token = LocalStorageManager.getUserAccessToken();
+  const refresh = LocalStorageManager.getUserRefreshToken();
 
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = "Bearer" + token;
-      localStorage.setItem("token", token);
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-      localStorage.removeItem("token");
-    }
-  }, [token]);
+  const updateSesUser = (sesUser: User) => {
+    dispatch(userSlice.actions.setSesUser(sesUser));
+  }; 
+
 
   const contextValue = useMemo(
     () => ({
-      token: token as string,
-      updateToken,
+      token,
+      refresh,
+      sesUser,
+      updateSesUser,
     }),
 
-    [token]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [token, refresh]
   );
 
   return (

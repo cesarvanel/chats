@@ -1,9 +1,11 @@
 import React, { useMemo } from "react";
 import "./sidebar.scss";
 import { useLocation, Link } from "react-router-dom";
+import { useSessionContext } from "../../context/session.context";
 
 const Sidebar = () => {
   const router = useLocation();
+  const {sesUser} = useSessionContext();
 
   const likns = [
     { label: "Contact", router: "/", id: 1 },
@@ -17,15 +19,15 @@ const Sidebar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
 
-  console.log(index, router.pathname);
+
 
   return (
     <div className="Sidebar">
       <div className="contains">
-        <img src="https://api.multiavatar.com/1257.png" alt="" />
+        <img src={`data:image/svg+xml;base64,${sesUser?.avatar}`} alt="" />
         <div className="user">
-          <div>Cesar Zoleko</div>
-          <div>Web developper</div>
+          <div>{sesUser?.username}</div>
+          <div>{sesUser?.job}</div>
         </div>
       </div>
 
@@ -34,7 +36,7 @@ const Sidebar = () => {
           const active = link.id === index + 1;
           return (
             <Link key={link.id} to={`${link.router}`}>
-              <div className={`item ${active && "active"}`}>
+              <div key={link.id} className={`item ${active && "active"}`}>
                 <li>{link.label}</li>
               </div>
             </Link>

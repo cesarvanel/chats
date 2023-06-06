@@ -37,7 +37,7 @@ code {
 body {
   position: relative;
   background: var(--main-bg);
-  max-width: 100vw;
+  width: 100vw;
   height: 100vh;
   color: var(--txt-color);
 }

@@ -4,6 +4,8 @@ import Step1 from "../../components/Step1/Step1";
 import Step2 from "../../components/Step2/Step2";
 import Step3 from "../../components/Step3/Step3";
 import { Register } from "../../types/interface";
+import { REGISTER } from "../../utils/constant/constant";
+import { AxiosInstance } from "../../api/axios-config";
 
 import { SubmitHandler, useForm, FormProvider } from "react-hook-form";
 
@@ -13,10 +15,17 @@ const RegisterPage = () => {
   const { step, steps, currentStepIndex, next, back, isLastStep, isFirtStep } =
     useMultiStepForm([<Step1 />, <Step2 />, <Step3 />]);
 
-  const onSubmit: SubmitHandler<Register> = (data) => {
+  const onSubmit: SubmitHandler<Register> = async (data) => {
     if (!isLastStep) return next();
 
-    console.log(data);
+    try {
+      console.log(REGISTER)
+      const response = await AxiosInstance.post(REGISTER, data);
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

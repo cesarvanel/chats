@@ -4,13 +4,18 @@ import "./LoginPage.scss";
 import { Login } from "../../types/interface";
 import { EnvelopeSimple, EyeSlash, LockKey } from "@phosphor-icons/react";
 import { useState } from "react";
+import { AxiosInstance } from "../../api/axios-config";
+import { LOGIN } from "../../utils/constant/constant";
+import { useNavigate } from "react-router-dom";
+import { LocalStorageManager } from "../../utils/localStorage/localStorage";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const [invisible, setInvisible] = useState(true);
   const {
     register,
     handleSubmit,
-    watch,
     trigger,
     formState: { errors, isSubmitting, isValid },
   } = useForm<Login>();
@@ -19,8 +24,22 @@ const LoginPage = () => {
     setInvisible((prev: boolean) => (prev = !invisible));
   };
 
-  const onSubmit: SubmitHandler<Login> = (data: Login) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Login> = async (data: Login) => {
+
+    try {
+      const response = await AxiosInstance.post(LOGIN, data);
+      console.log(response)
+      if (response.status === 200) {
+        const { data } = response;
+
+        LocalStorageManager.saveUserAccessToken(data.accessToken);
+        LocalStorageManager.saveUserRefreshToken(data.refreshToken);
+
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -92,11 +111,7 @@ const LoginPage = () => {
             </Link>
           </div>
           <div className="btn-container">
-            <button
-              disabled={!isValid}
-              className={`${isValid && "submit"}`}
-              type="submit"
-            >
+            <button className={`${isValid && "submit"}`} type="submit">
               {isSubmitting ? "loading..." : "sign in"}
             </button>
           </div>
@@ -107,10 +122,7 @@ const LoginPage = () => {
               <Link to="/register">Sign Up</Link>
             </strong>
           </p>
-
-          <pre>{JSON.stringify(watch())}</pre>
         </form>
-
       </div>
     </div>
   );

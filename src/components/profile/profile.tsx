@@ -2,8 +2,11 @@ import React from "react";
 
 import "./profile.scss";
 import { X } from "@phosphor-icons/react";
+import { useSessionContext } from "../../context/session.context";
 
 const Profile = () => {
+  const { sesUser } = useSessionContext();
+  console.log(sesUser)
   return (
     <div className="Profile">
       <X size={32} weight="fill" />
