@@ -1,37 +1,57 @@
-import { useContext, createContext, useMemo, FC } from "react";
-import { User } from "../types/interface";
-import { useAppSelector, useAppDispatch } from "../states/stores/stores";
-import { userSlice } from "../states/app/user/reducer";
+import {
+  useContext,
+  createContext,
+  useMemo,
+  FC,
+  useEffect,
+  useCallback,
+} from "react";
 import { LocalStorageManager } from "../utils/localStorage/localStorage";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../states/stores/stores";
+import { userSlice } from "../states/app/user/reducer";
 
+import { useJwt } from "react-jwt";
 
 export type sessionContextProps = {
   token: string | null;
   refresh: string | null;
-  sesUser: User | null;
-  updateSesUser: (sesUser: User) => void;
+  isExpired: boolean;
+  logout: () => void;
 };
 
 export const SessionContext = createContext<sessionContextProps>({} as any);
 
 export const SessionContextProvider: FC<any> = ({ children }) => {
-  const dispatch = useAppDispatch();
-
-  const {sesUser} = useAppSelector((state) => state);
   const token = LocalStorageManager.getUserAccessToken();
   const refresh = LocalStorageManager.getUserRefreshToken();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const updateSesUser = (sesUser: User) => {
-    dispatch(userSlice.actions.setSesUser(sesUser));
-  }; 
+  const { isExpired } = useJwt(token as string);
 
+  const logout = useCallback(() => {
+    LocalStorageManager.saveUserAccessToken("");
+    setTimeout(() => {
+      dispatch(userSlice.actions.logout());
+    }, 3000);
+
+    navigate("/welcome");
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    if (isExpired) {
+      logout();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExpired]);
 
   const contextValue = useMemo(
     () => ({
       token,
       refresh,
-      sesUser,
-      updateSesUser,
+      isExpired,
+      logout
     }),
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

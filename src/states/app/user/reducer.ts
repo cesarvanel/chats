@@ -1,31 +1,32 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { userState, SignInType, User } from "../../../types/interface";
-import { RootState } from "../../stores/stores";
-import { getProfile } from "./action";
+import { userState, User, Conversations } from "../../../types/interface";
+import { getProfile, loadConversation } from "./action";
 
 export const initialState: userState = {
-  tokens: null,
   sesUser: null,
   loading: "0",
+  conversations: {
+    conversations: [],
+    loading: false,
+  },
 };
 
 export const userSlice = createSlice({
   name: "userSlice",
   initialState: initialState,
   reducers: {
-    login: (state, action: PayloadAction<SignInType>) => {
-      state.tokens = action.payload.tokens;
-      state.sesUser = action.payload.user;
-      state.loading = "1";
+    setSesUser: (state, action: PayloadAction<User>) => {
+      state.sesUser = action.payload;
+    },
+
+    setConversation: (state, action: PayloadAction<Conversations[]>) => {
+      state.conversations.loading = true;
+      state.conversations.conversations = action.payload;
     },
 
     logout: (state) => {
-      state.tokens = null;
+      state.loading = "0";
       state.sesUser = null;
-    },
-
-    setSesUser: (state, action: PayloadAction<User>) => {
-      state.sesUser = action.payload;
     },
   },
 
@@ -40,9 +41,14 @@ export const userSlice = createSlice({
       state.loading = "1";
       state.sesUser = action.payload;
     });
+
+    builder.addCase(loadConversation.pending, (state) => {
+      state.conversations.loading = false;
+    });
+
+    builder.addCase(loadConversation.fulfilled, (state, action) => {
+      state.conversations.loading = true;
+      state.conversations.conversations = action.payload;
+    });
   },
 });
-
-export const selectCurrentUser = (state: RootState) => state.sesUser;
-
-export const selectTokens = (state: RootState) => state.tokens;

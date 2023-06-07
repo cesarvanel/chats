@@ -149,10 +149,15 @@
 
       p {
         text-align: center;
+        cursor: pointer;
+        font-size: 16px;
+        color: var(--four-bg);
 
         strong {
           text-transform: capitalize;
           text-decoration: none;
+          cursor: pointer;
+      
           &:hover {
             text-decoration: underline;
           }

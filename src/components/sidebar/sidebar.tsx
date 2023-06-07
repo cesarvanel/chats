@@ -1,11 +1,14 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import "./sidebar.scss";
 import { useLocation, Link } from "react-router-dom";
+import { useAppSelector } from "../../states/stores/stores";
 import { useSessionContext } from "../../context/session.context";
 
 const Sidebar = () => {
   const router = useLocation();
-  const {sesUser} = useSessionContext();
+
+  const { sesUser } = useAppSelector((state) => state.user);
+  const { logout } = useSessionContext();
 
   const likns = [
     { label: "Contact", router: "/", id: 1 },
@@ -18,8 +21,6 @@ const Sidebar = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
-
-
 
   return (
     <div className="Sidebar">
@@ -51,7 +52,7 @@ const Sidebar = () => {
           <button>Setting</button>
         </div>
         <div>
-          <button>Logout</button>
+          <button onClick={() => logout()}>Logout</button>
         </div>
       </div>
     </div>

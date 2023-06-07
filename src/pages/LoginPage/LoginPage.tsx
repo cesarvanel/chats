@@ -9,7 +9,11 @@ import { LOGIN } from "../../utils/constant/constant";
 import { useNavigate } from "react-router-dom";
 import { LocalStorageManager } from "../../utils/localStorage/localStorage";
 
-const LoginPage = () => {
+export interface LoginPageProps {
+  onCreateAccount: () => void;
+}
+
+const LoginPage = ({ onCreateAccount }: LoginPageProps) => {
   const navigate = useNavigate();
 
   const [invisible, setInvisible] = useState(true);
@@ -25,10 +29,8 @@ const LoginPage = () => {
   };
 
   const onSubmit: SubmitHandler<Login> = async (data: Login) => {
-
     try {
       const response = await AxiosInstance.post(LOGIN, data);
-      console.log(response)
       if (response.status === 200) {
         const { data } = response;
 
@@ -118,9 +120,7 @@ const LoginPage = () => {
 
           <p>
             Don't have account yet?{" "}
-            <strong>
-              <Link to="/register">Sign Up</Link>
-            </strong>
+            <strong onClick={() => onCreateAccount()}>Sign Up</strong>
           </p>
         </form>
       </div>

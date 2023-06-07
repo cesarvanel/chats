@@ -1,20 +1,17 @@
 import "./App.scss";
 import { Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
 import HomePage from "./pages/HomePage/HomePage";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import Profile from "./components/profile/profile";
 import Group from "./pages/Group/Group";
 import Contact from "./pages/Contact/Contact";
 import { ProtectedRoute } from "./routes/protectedRoute";
-
+import WelcomePage from "./pages/WelcomePage/WelcomePage";
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/welcome" element={<WelcomePage />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />}>

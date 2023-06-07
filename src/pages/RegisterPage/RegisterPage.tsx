@@ -8,9 +8,14 @@ import { REGISTER } from "../../utils/constant/constant";
 import { AxiosInstance } from "../../api/axios-config";
 
 import { SubmitHandler, useForm, FormProvider } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
-const RegisterPage = () => {
+export interface SignupProps {
+  onLogin: () => void;
+}
+const RegisterPage = ({ onLogin }: SignupProps) => {
   const methods = useForm<Register>();
+  const navigate = useNavigate();
 
   const { step, steps, currentStepIndex, next, back, isLastStep, isFirtStep } =
     useMultiStepForm([<Step1 />, <Step2 />, <Step3 />]);
@@ -19,10 +24,10 @@ const RegisterPage = () => {
     if (!isLastStep) return next();
 
     try {
-      console.log(REGISTER)
       const response = await AxiosInstance.post(REGISTER, data);
-
-      console.log(response);
+      if (response.status === 200) {
+        navigate("/welcome");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -54,6 +59,8 @@ const RegisterPage = () => {
                   {!isLastStep ? "next" : "submit"}
                 </button>
               </div>
+
+              <div className="txt" onClick={() => onLogin()}>I hava Account Login</div>
             </>
           </form>
         </FormProvider>

@@ -1,39 +1,34 @@
+import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { userSlice } from "../app/user/reducer";
+import { socketSlice } from "../app/socket/reducer";
+import SocketManager from "../app/socket/socket-manager";
+import { LocalStorageManager } from "../../utils/localStorage/localStorage";
+import { SocketEvent } from "../../types/interface";
+import { SocketListenner } from "../app/socket/socketEmitter";
+const token = LocalStorageManager.getUserAccessToken();
+
+const stores = configureStore({
+  reducer: { user: userSlice.reducer, socket: socketSlice.reducer },
+});
+
+const { socket } = SocketManager.getInstance();
+
+socket.on("connect", () => {
+  console.log(socket.id);
+  socket.emit(SocketEvent.AUTHENTICATE_ME, token);;
+});
 
 
-import { configureStore } from '@reduxjs/toolkit'
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { userSlice } from '../app/user/reducer'
-import SocketManager from '../app/socket/socket-manager';
-import { LocalStorageManager } from '../../utils/localStorage/localStorage';
-import { SocketEvent } from '../../types/interface';
-const token = LocalStorageManager.getUserAccessToken()
+
+SocketListenner(socket , stores)
 
 
-const store = configureStore({
-  reducer: userSlice.reducer,
-})
-
-
-const {socket}  = SocketManager.getInstance();
-
-socket.on('connect', () =>{
-  
-  console.log(socket.id)
-  socket.emit(SocketEvent.AUTHENTICATE_ME, token)
-})
-
-socket.on(SocketEvent.AUTHENTICATED,(data:any) =>{
-
-  console.log(data, 'data')
-
-})
-
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch
-export const useAppDispatch: () => AppDispatch = useDispatch // Export a hook that can be reused to resolve types
+export type RootState = ReturnType<typeof stores.getState>;
+export type AppDispatch = typeof stores.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch; 
 
 // hook for selector
-export const useAppSelector : TypedUseSelectorHook<RootState> = useSelector
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export default store
+export default stores;

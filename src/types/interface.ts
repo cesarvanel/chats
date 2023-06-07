@@ -21,6 +21,27 @@ export interface User {
   images: any[];
 }
 
+type message = {
+  avatar: string;
+  message: string;
+  createdAt: Date;
+  isMyMessage: boolean;
+};
+
+export type Conversations = {
+  avatar: string;
+
+  username: string;
+
+  email: string;
+
+  createdAt: Date;
+
+  lastMessageText: string;
+
+  messages: message[];
+};
+
 export type Tokens = {
   accessToken: string;
   refreshToken: string;
@@ -46,9 +67,12 @@ export interface Login {
 }
 
 export type userState = {
-  tokens: Tokens | null;
   sesUser: null | User;
-  loading: "0" | "1";
+  loading: "0" | "1" | "3";
+  conversations: {
+    conversations : Conversations[]; 
+    loading : boolean
+  }
 };
 
 export const SocketEvent = {
@@ -62,4 +86,5 @@ export const SocketEvent = {
   ADD_USER: "ADD_USER",
   SEND_MESSAGE: "SEND_MESSAGE",
   RECEIVE_MESSAGE: "RECEIVE_MESSAGE",
+  GET_PROFILE_DATA: "GET_PROFILE_DATA",
 };
