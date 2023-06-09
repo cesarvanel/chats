@@ -7,6 +7,7 @@ import Contact from "./pages/Contact/Contact";
 import { ProtectedRoute } from "./routes/protectedRoute";
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 
+
 function App() {
   return (
     <div className="App">

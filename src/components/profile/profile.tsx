@@ -2,18 +2,20 @@ import React from "react";
 
 import "./profile.scss";
 import { X } from "@phosphor-icons/react";
+import { useAppSelector } from "../../states/stores/stores";
 
 const Profile = () => {
+  const { sesUser } = useAppSelector((state) => state.user);
 
   return (
     <div className="Profile">
       <X size={32} weight="fill" />
 
       <div className="top">
-        <img src="/assets/cesar.jpg" alt="" sizes="" />
+        <img src={`data:image/svg+xml;base64,${sesUser?.avatar}`} alt="" />
         <div>
-          <p>CesarVanel</p>
-          <span>Dschang</span>
+          <p>{sesUser?.username}</p>
+          <span>{sesUser?.city}</span>
         </div>
       </div>
       <hr />
@@ -21,14 +23,16 @@ const Profile = () => {
       <div className="middle">
         <div className="items">
           <h4>About</h4>
-          <div className="text">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-          </div>
+          {sesUser?.about && (
+            <div className="text">
+              {sesUser.about}
+            </div>
+          )}
         </div>
 
         <div className="items">
           <h4>Contact Number</h4>
-          <div>+237693249369</div>
+          {sesUser?.number && <div>{sesUser.number}</div>}
         </div>
       </div>
       <hr />
@@ -36,11 +40,9 @@ const Profile = () => {
         <div className="medias">
           <h4>Medias</h4>
           <div className="images">
-            <img src="/assets/cesar.jpg" alt="" sizes="" />
-            <img src="/assets/cesar.jpg" alt="" sizes="" />
-            <img src="/assets/cesar.jpg" alt="" sizes="" />
-            <img src="/assets/cesar.jpg" alt="" sizes="" />{" "}
-            <img src="/assets/cesar.jpg" alt="" sizes="" />
+            {sesUser?.images.map((image) => {
+              return <img src={`data:image/svg+xml;base64,${image}`} alt="" />;
+            })}
           </div>
         </div>
       </div>

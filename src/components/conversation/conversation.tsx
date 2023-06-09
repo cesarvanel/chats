@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import "./conversation.scss";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { AxiosInstance } from "../../api/axios-config";
-import { ALL_USER } from "../../utils/constant/constant";
+import { ADD_CONVERSATION, ALL_USER } from "../../utils/constant/constant";
 import { User } from "../../types/interface";
 import Loader from "../loader/loader";
 
@@ -14,8 +14,6 @@ const Conversation = () => {
   const modale = useModale();
   const [loaded, setLoaded] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
-  const [selectCurrentUserId, setSelectCurrentUserId] =
-    useState<any>(undefined);
   const [userSelected, setUserSelected] = useState<User[]>([]);
 
   useEffect(() => {
@@ -42,8 +40,6 @@ const Conversation = () => {
   };
 
   const selectUsers = (user: User) => {
-    setSelectCurrentUserId((prev: string) => (prev = user._id));
-
     const isSelected = checkSelected(user);
 
     if (isSelected) return cancelSelected(user._id);
@@ -53,7 +49,14 @@ const Conversation = () => {
     });
   };
 
-  console.log(userSelected, "data");
+  const handleAddConversations = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const response = await AxiosInstance.post(ADD_CONVERSATION, userSelected);
+    if (response.status === 201) {
+      modale.close();
+    }
+  };
+
   return (
     <div className="Conversation">
       <h3>Conversations</h3>
@@ -69,7 +72,12 @@ const Conversation = () => {
         </div>
       </div>
 
-      <Modale title="Add Contact" open={modale.open} onClose={modale.close}>
+      <Modale
+        title="Add Contact"
+        open={modale.open}
+        onClose={modale.close}
+        handleSubmmit={handleAddConversations}
+      >
         <div className="wrappersss">
           {loaded ? (
             <>

@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import "./LoginPage.scss";
-import { Login } from "../../types/interface";
+import { Login, SocketEvent } from "../../types/interface";
 import { EnvelopeSimple, EyeSlash, LockKey } from "@phosphor-icons/react";
 import { useState } from "react";
 import { AxiosInstance } from "../../api/axios-config";
 import { LOGIN } from "../../utils/constant/constant";
 import { useNavigate } from "react-router-dom";
 import { LocalStorageManager } from "../../utils/localStorage/localStorage";
+import { useSocket } from "../../context/socket.context";
+import { toast } from "react-toastify";
 
 export interface LoginPageProps {
   onCreateAccount: () => void;
@@ -15,6 +17,7 @@ export interface LoginPageProps {
 
 const LoginPage = ({ onCreateAccount }: LoginPageProps) => {
   const navigate = useNavigate();
+  const { socket } = useSocket();
 
   const [invisible, setInvisible] = useState(true);
   const {
@@ -37,10 +40,12 @@ const LoginPage = ({ onCreateAccount }: LoginPageProps) => {
         LocalStorageManager.saveUserAccessToken(data.accessToken);
         LocalStorageManager.saveUserRefreshToken(data.refreshToken);
 
+        socket.emit(SocketEvent.ADD_USER, data.accessToken);
+
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      toast.error("email ou mot de passe incorrect reessayer svp ");
     }
   };
 

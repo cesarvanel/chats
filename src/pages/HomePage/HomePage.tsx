@@ -1,13 +1,12 @@
 import "./HomePage.scss";
 import Sidebar from "../../components/sidebar/sidebar";
-import Conversation from "../../components/conversation/conversation";
 import Profile from "../../components/profile/profile";
-import Chat from "../../components/chat/chat";
 import withAuthProtection from "../../hoc/withAuthProtection";
 import { useEffect } from "react";
 import Loader from "../../components/loader/loader";
 import { useAppDispatch, useAppSelector } from "../../states/stores/stores";
 import { getProfile } from "../../states/app/user/action";
+import ChatContainers from "../../components/ChatContainers/ChatContainers";
 
 export const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -26,8 +25,7 @@ export const HomePage = () => {
       {loading === "1" ? (
         <>
           <Sidebar />
-          <Conversation />
-          <Chat />
+          <ChatContainers />
           <Profile />
         </>
       ) : (

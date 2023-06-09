@@ -8,7 +8,10 @@ export const initialState: userState = {
   conversations: {
     conversations: [],
     loading: false,
+    currentChat: undefined,
   },
+
+ 
 };
 
 export const userSlice = createSlice({
@@ -22,6 +25,10 @@ export const userSlice = createSlice({
     setConversation: (state, action: PayloadAction<Conversations[]>) => {
       state.conversations.loading = true;
       state.conversations.conversations = action.payload;
+    },
+
+    setCurrentChat: (state, action: PayloadAction<Conversations>) => {
+      state.conversations.currentChat = action.payload;
     },
 
     logout: (state) => {

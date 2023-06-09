@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { SessionContextProvider } from "./context/session.context";
 import { Provider } from "react-redux";
 import store from "./states/stores/stores";
+import SocketContextProvider from "./context/socket.context";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,7 +21,14 @@ root.render(
         <SessionContextProvider>
           <ToastContainer />
           <Routes>
-            <Route path="/*" element={<App />} />
+            <Route
+              path="/*"
+              element={
+                <SocketContextProvider>
+                  <App />
+                </SocketContextProvider>
+              }
+            />
           </Routes>
         </SessionContextProvider>
       </Provider>

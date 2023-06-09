@@ -15,6 +15,8 @@ export interface SignupProps {
 }
 const RegisterPage = ({ onLogin }: SignupProps) => {
   const methods = useForm<Register>();
+  const {formState} = methods; 
+  const {isSubmitting} = formState
   const navigate = useNavigate();
 
   const { step, steps, currentStepIndex, next, back, isLastStep, isFirtStep } =
@@ -25,8 +27,8 @@ const RegisterPage = ({ onLogin }: SignupProps) => {
 
     try {
       const response = await AxiosInstance.post(REGISTER, data);
-      if (response.status === 200) {
-        navigate("/welcome");
+      if (response.status === 201) {
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -56,7 +58,7 @@ const RegisterPage = ({ onLogin }: SignupProps) => {
                   </button>
                 )}
                 <button type="submit" className="btn-submit">
-                  {!isLastStep ? "next" : "submit"}
+                  {!isLastStep ? "next" : isSubmitting? "submit" : "Loading"}
                 </button>
               </div>
 

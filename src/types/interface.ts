@@ -1,3 +1,4 @@
+
 export interface Register {
   username: string;
   email: string;
@@ -21,25 +22,17 @@ export interface User {
   images: any[];
 }
 
-type message = {
+export type message = {
   avatar: string;
   message: string;
-  createdAt: Date;
+  createdAt: string;
   isMyMessage: boolean;
 };
 
-export type Conversations = {
-  avatar: string;
-
-  username: string;
-
-  email: string;
-
-  createdAt: Date;
-
-  lastMessageText: string;
-
-  messages: message[];
+export type Conversations = User & {
+  lastMessage: string; 
+  createdAt : Date;
+  messages: message[] ;
 };
 
 export type Tokens = {
@@ -70,9 +63,12 @@ export type userState = {
   sesUser: null | User;
   loading: "0" | "1" | "3";
   conversations: {
-    conversations : Conversations[]; 
-    loading : boolean
-  }
+    conversations: Conversations[];
+    loading: boolean;
+    currentChat: undefined | Conversations;
+  };
+
+
 };
 
 export const SocketEvent = {
@@ -87,4 +83,6 @@ export const SocketEvent = {
   SEND_MESSAGE: "SEND_MESSAGE",
   RECEIVE_MESSAGE: "RECEIVE_MESSAGE",
   GET_PROFILE_DATA: "GET_PROFILE_DATA",
+  NEW_USER: "NEW_USER",
+  PRIVATE_MESSAGE: "PRIVATE_MESSAGE"
 };

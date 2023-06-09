@@ -17,4 +17,6 @@ export const USER_DATA_PROFILE = Auth + '/profile';
 
 export const ALL_USER = Auth
 
-export const CONVERSATION = Conversation
+export const CONVERSATION = Conversation; 
+
+export const ADD_CONVERSATION = CONVERSATION + '/addConversations'
